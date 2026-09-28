@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* Tokens from the brief: ink background, paper text, graphite secondary, one restrained signal blue. */
+@theme {
+  --color-ink: #080a0d;
+  --color-panel: #0d1016;
+  --color-panel-2: #121720;
+  --color-paper: #f5f7fa;
+  --color-graphite: #8b93a1;
+  --color-signal: #5b8cff;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.15);
+
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    /* Smooth scrolling comes from Lenis, which honours reduced motion; native smooth scroll would fight it. */
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgb(91 140 255 / 0.35);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Quiet elevation: a faint top-lit gradient, a hairline border, an inner highlight and a long soft shadow. */
+  .surface {
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.012) 60%);
+    border: 1px solid var(--color-line);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 40px 80px -48px rgb(0 0 0 / 0.9);
+  }
+}
+
+/* ── Film grain: one static tile over the whole page; hides gradient banding and softens flat blacks. ── */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.045;
+}
+
+/* ── Portrait: a vignette sized to the frame (closest-side) reaches full transparency at every edge,
+      so the subject reads as lit out of the dark rather than as a pasted rectangle. ── */
+.portrait-fade {
+  mask-image: radial-gradient(closest-side at 50% 46%, #000 58%, transparent 100%);
+  -webkit-mask-image: radial-gradient(closest-side at 50% 46%, #000 58%, transparent 100%);
+}
+
+/* A light grade only: the studio backdrop already sits within a shade of the page's ink. */
+.portrait-grade {
+  filter: saturate(0.92) contrast(1.02);
+}
+
+/* ── Architecture diagrams ───────────────────────────────────────────── */
+.diagram text {
+  font-family: var(--font-sans);
+}
+
+.diagram .node-sub {
+  font-family: var(--font-mono);
+}
+
+.diagram-thumb .edge {
+  stroke: var(--color-line-strong);
+  transition: stroke 0.35s ease;
+}
+
+.group:hover .diagram-thumb .edge,
+.group:focus-within .diagram-thumb .edge {
+  stroke: rgb(91 140 255 / 0.65);
+}
+
+/* Faint engineering-paper dot grid behind the system map. */
+.dot-grid {
+  background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+/* Horizontal-scroll affordance for wide diagrams on narrow screens. */
+.scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
