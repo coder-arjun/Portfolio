@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { PageMeta } from '../data/routes';
 
-const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, '');
+const SITE_URL = (import.meta.env.SITE_URL as string | undefined)?.replace(/\/$/, '');
 
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);

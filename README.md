@@ -61,10 +61,13 @@ internal URLs, proprietary screenshots or security-finding details. Product scre
 
 ## Deploying
 
-`dist/` is a static site. Every route has its own `index.html`, so deep links work without rewrite
-rules; `dist/404.html` serves unknown paths.
+`dist/` is a static site. Every route has its own HTML file (`work.html`, `work/cobankpluspro.html`, …),
+so deep links load directly without rewrite rules or trailing-slash redirects; `dist/404.html` serves
+unknown paths. Node 24 is pinned in `.node-version`.
 
-- **Netlify / Cloudflare Pages / Vercel:** build command `npm run build`, publish directory `dist`.
+- **Cloudflare Pages (live host):** build command `npm run build`, output directory `dist`, environment
+  variable `SITE_URL` = the site's public address. Every push to `main` deploys automatically.
+- **Netlify / Vercel:** same build command and output directory.
 - **GitHub Pages:** publish `dist/` (the 404 page is picked up automatically).
 - **IIS (e.g. MonsterASP.NET):** upload `dist/`; add a `web.config` that maps 404 to `/404.html` if needed.
 

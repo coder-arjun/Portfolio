@@ -1,8 +1,9 @@
 /**
- * Post-build step: write one index.html per route with that page's <title>, description and social tags,
+ * Post-build step: write one HTML file per route with that page's <title>, description and social tags,
  * so crawlers and link previews (LinkedIn, WhatsApp, Slack) see the right metadata without running JS.
- * Each route gets its own file (dist/work/cobankpluspro/index.html, …), which also makes deep links work
- * on any static host. dist/404.html is the fallback for unknown paths.
+ * Each route gets its own file named after the route (dist/work.html, dist/work/cobankpluspro.html, …).
+ * Static hosts such as Cloudflare Pages serve /work.html at /work directly, whereas /work/index.html would
+ * cost a redirect to /work/ and mismatch the canonical URL. dist/404.html is the fallback for unknown paths.
  *
  * Set SITE_URL (e.g. SITE_URL=https://arjunpk.dev npm run build) to also emit canonical URLs,
  * absolute og:image/og:url and sitemap.xml.
@@ -48,7 +49,7 @@ function render(meta, { indexable = true } = {}) {
 }
 
 for (const meta of allRoutes) {
-  const file = meta.path === '/' ? path.join(dist, 'index.html') : path.join(dist, meta.path, 'index.html');
+  const file = meta.path === '/' ? path.join(dist, 'index.html') : path.join(dist, `${meta.path}.html`);
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, render(meta));
 }
